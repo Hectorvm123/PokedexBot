@@ -10,7 +10,7 @@ import glob
 import random
 
 
-TOKEN = 'MTA3NzY0MzU2NzY0NTg2ODExNA.Gt0P05.o1CixBGJDHde6m9_6OrCWj5xOiB6lh-HMTFOOU'
+TOKEN = 'MTA3Nz2NzY0NTgfefwfefwfFst0oDxMDgIY'
 
 intents = discord.Intents.all()
 
@@ -18,6 +18,8 @@ client = commands.Bot(command_prefix='.', intents=intents)
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=" .info to show commands"))
+
     print('bot ready')
 
 @client.event
@@ -73,13 +75,16 @@ async def info(ctx):
   > caughtRegion: Same as above but from an specific region\n
 
   > effectiveness <typeName> <objectivePokemonName>: Tells you how effective is a Type against a Pokemon\n
+  
+  > typeChart: Shows a image with every single type effectiveness
+
+  > play: Lets you play the "who's that Pokemon?" game from the anime show
 
   """
     embed = discord.Embed(title="Pokedex",url="https://cdn.discordapp.com/avatars/809827305295314967/babea11271bbf5a89d5bf15220e7c278.webp?size=1024",description= des,
     timestamp=datetime.datetime.utcnow(),
     color=discord.Color.blue())
-    embed.add_field(name="Kanto", value= regiones[0], inline=True)
-    embed.set_footer(text="solicitado por: {}".format(ctx.author.name))
+    embed.set_footer(text="Executed by: {}".format(ctx.author.name))
     embed.set_author(name="Hector Valls Mira",       
     icon_url="https://images8.alphacoders.com/118/thumb-1920-1182414.png")
 
@@ -118,7 +123,7 @@ async def pokemonEmbed(ctx,pokemon,send):
 
 
 @client.command()
-async def pokeregion(ctx, region):
+async def pokeRegion(ctx, region):
 
     http = urllib3.PoolManager()
 
@@ -254,9 +259,14 @@ async def caughtRegion(ctx, region):
         response = http.request("GET", url)
         pokemon = json.loads(response.data.decode("utf-8"), object_hook=lambda d: SimpleNamespace(**d))
 
-        if len(userComplete.pokemonDTO) != len(pokemon):
+        temp = []
+        for poke in userComplete.pokemonDTO:
+            if poke.region.name == region:
+                temp.append(poke)
+
+        if len(temp) != len(pokemon):
             await ctx.send("You caught {} out of the {} different Pokemon species on {}. Keep up the good work trainer!".format(
-                len(userComplete.pokemonDTO), len(pokemon), region))  
+                len(temp), len(pokemon), region))  
         else:
              await ctx.send("You caught every single Pokemon of {}, you are awesome".format(region))
     
@@ -327,7 +337,7 @@ async def play(ctx):
         file_name = os.path.splitext(os.path.basename(file))[0]
 
         if msg.content == file_name:
-            await ctx.send("It's are correct. You are awesome ma boy")
+            await ctx.send("It's correct. You are awesome ma boy")
         else:
             await ctx.send("If I had added your shadow the answer would be Donkey")
 
