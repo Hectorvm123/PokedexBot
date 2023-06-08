@@ -10,7 +10,7 @@ import glob
 import random
 
 
-TOKEN = 'MTA3NzY0MzU2NzY0NTg2ODExNA.Gsh27z.8gfuQo9X3u-_z4CVKr2TvkX0OSFst0oDxMDgIY'
+TOKEN = 'MTA3NzY0MzU2NzY0NTg2ODExNA.Gw4eWU.xC5EFHUFPWHgougpklPuA3F3lGDGO2M-knT_1lJByMi_LBgK1ww'
 
 intents = discord.Intents.all()
 
